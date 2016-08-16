@@ -86,11 +86,14 @@
         (beginning-of-line)
       (term-send-raw))))
 
-;; 这样只能将 M-k 绑定到C-k的快捷键？？
+;; optimus kill-line for term-mode
 (defun multi-term-kill-line ()
   "kill current line"
   (interactive)
-  (term-send-raw-string "\C-k"))
+  (if (and (eq 'term-mode major-mode)
+           (ab/is-at-end-line))
+      (term-send-raw-string "\C-k")
+    (kill-line)))
 
 (defun ab/delete-char ()
   "delete char"
@@ -118,6 +121,7 @@
 (add-hook 'term-mode-hook
           (lambda ()
             ;; 下面设置multi-term buffer的长度无限
+            (global-set-key (kbd "C-k") 'multi-term-kill-line)
             (setq term-buffer-maximum-size 0)
             (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
             (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
@@ -155,14 +159,5 @@
         (message "switch to buffer %s" (buffer-name buf))
         (switch-to-buffer buf)))
     ))
-
-;; (add-hook 'term-mode-hook
-;;           (lambda ()
-;;             ))
-;; (add-hook 'term-mode-hook
-;;           (lambda () (local-set-key (kbd "C-k") #'multi-term-kill-line)))
-
-;; (eval-after-load 'term
-;;   '(define-key term-mode-map "\C-k" 'multi-term-kill-line))
 
 (provide 'multi-term-config)
