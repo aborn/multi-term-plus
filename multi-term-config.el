@@ -128,6 +128,7 @@
             (add-to-list 'term-bind-key-alist '("C-a" . ab/move-beginning-of-line))
             (add-to-list 'term-bind-key-alist '("M-k" . multi-term-kill-line))
             (add-to-list 'term-bind-key-alist '("C-k" . multi-term-kill-line))
+            (add-to-list 'term-bind-key-alist '("C-j" . multi-term-find))
             (add-to-list 'term-bind-key-alist '("C-d" . ab/delete-char))
             (add-to-list 'term-bind-key-alist '("C-b" . ab/backward-char))
             (add-to-list 'term-bind-key-alist '("C-f" . ab/forward-char))
