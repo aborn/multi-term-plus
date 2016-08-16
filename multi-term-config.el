@@ -6,7 +6,6 @@
 ;;     另一种是 (term-line-mode) 像普通的buffer
 ;; 见： http://www.gnu.org/software/emacs/manual/html_node/emacs/Term-Mode.html
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(provide 'multi-term-config)
 (require 'multi-term)
 
 ;; 一些基本配置
@@ -134,3 +133,25 @@
 
 ;; 初始化启动的时候打开一个terminal
 (get-term)
+
+(defun multi-term--buffer-name-list ()
+  (mapcar (lambda (elt)
+            (setq ab/debug elt)
+            (list (buffer-name elt) elt))
+          multi-term-buffer-list))
+
+(defun multi-term-find ()
+  "Find multi-term by name, and switch it!"
+  (interactive)
+  (let* ((collection nil)
+         (key nil))
+    (setq collection (multi-term--buffer-name-list))
+    (setq key (completing-read "find multi-term by name: "
+                               collection))
+    (let ((buf (car (assoc-default key collection))))
+      (when (bufferp buf)
+        (message "switch to buffer %s" (buffer-name buf))
+        (switch-to-buffer buf)))
+    ))
+
+(provide 'multi-term-config)
