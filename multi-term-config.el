@@ -136,8 +136,11 @@
 
 (defun multi-term--buffer-name-list ()
   (mapcar (lambda (elt)
-            (setq ab/debug elt)
-            (list (buffer-name elt) elt))
+            (save-current-buffer
+              (set-buffer elt)
+              (let (name)
+                (setq name (format "%s@%s" (buffer-name elt) default-directory))
+                (list name elt))))
           multi-term-buffer-list))
 
 (defun multi-term-find ()
