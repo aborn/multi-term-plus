@@ -87,8 +87,8 @@
       (term-send-raw))))
 
 ;; 这样只能将 M-k 绑定到C-k的快捷键？？
-(defun ab/kill-line ()
-  "Search history reverse."
+(defun multi-term-kill-line ()
+  "kill current line"
   (interactive)
   (term-send-raw-string "\C-k"))
 
@@ -107,8 +107,6 @@
 ;;     (progn (if (ab/is-at-end-line)
 ;;                (term-send-raw)
 ;;              (extend-selection)))))
-
-
 (defun ab/extend-selection ()
   (interactive)
   (term-send-raw-string "\C-l"))
@@ -124,7 +122,8 @@
             (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
             (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
             (add-to-list 'term-bind-key-alist '("C-a" . ab/move-beginning-of-line))
-            (add-to-list 'term-bind-key-alist '("M-k" . ab/kill-line))
+            (add-to-list 'term-bind-key-alist '("M-k" . multi-term-kill-line))
+            (add-to-list 'term-bind-key-alist '("C-k" . multi-term-kill-line))
             (add-to-list 'term-bind-key-alist '("C-d" . ab/delete-char))
             (add-to-list 'term-bind-key-alist '("C-b" . ab/backward-char))
             (add-to-list 'term-bind-key-alist '("C-f" . ab/forward-char))
@@ -156,5 +155,14 @@
         (message "switch to buffer %s" (buffer-name buf))
         (switch-to-buffer buf)))
     ))
+
+;; (add-hook 'term-mode-hook
+;;           (lambda ()
+;;             ))
+;; (add-hook 'term-mode-hook
+;;           (lambda () (local-set-key (kbd "C-k") #'multi-term-kill-line)))
+
+;; (eval-after-load 'term
+;;   '(define-key term-mode-map "\C-k" 'multi-term-kill-line))
 
 (provide 'multi-term-config)
