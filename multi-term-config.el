@@ -92,7 +92,7 @@
 
 ;; optimus kill-line for term-mode
 (defun multi-term-kill-line ()
-  "kill current line"
+  "Smart kill-line in multi-term mode."
   (interactive)
   (if (and (eq 'term-mode major-mode)
            (multi-term-is-at-end-line))
