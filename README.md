@@ -1,2 +1,5 @@
 # aborn-multi-term
-Fork from [multi-term 1.3 2016-06-19 17:30:20](https://www.emacswiki.org/emacs/download/multi-term.el), and customize it!
+File [multi-term.el](./multi-term.el) fork from [multi-term](https://www.emacswiki.org/emacs/download/multi-term.el). 
+And I do some customize work in [multi-term-config.el](./multi-term-config.el).
+
+
