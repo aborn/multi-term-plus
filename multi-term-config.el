@@ -19,15 +19,15 @@
 (add-to-list 'term-bind-key-alist '("C-k"))
 (add-to-list 'term-bind-key-alist '("M-n"))  ;; 这句不起作用
 
-(defun ab/is-at-end-line ()
+(defun multi-term-is-at-end-line ()
   "判断是否在最后一行"
   (equal (line-number-at-pos) (count-lines (point-min) (point-max))))
 
-(defun ab/is-term-mode ()
+(defun multi-term-is-term-mode ()
   "判断是否为 term 模式"
   (string= major-mode "term-mode"))
 
-(defun ab/debug ()
+(defun multi-term-debug ()
   "debug时用"
   (interactive)
   (if (equal (display-pixel-width) 1920)
@@ -45,7 +45,7 @@
   "Switch to the term buffer last used, or create a new one if
     none exists, or if the current buffer is already a term."
   (interactive)
-  (select-window (ab/get-window-at-right-botton))   ;; 先切换到右边的窗口
+  (select-window (multi-term-get-window-at-right-botton))   ;; 先切换到右边的窗口
   (let ((b (last-term-buffer (buffer-list))))
     (if (or (not b) (eq 'term-mode major-mode))
         (progn (multi-term)
@@ -54,35 +54,39 @@
              (message "switch a exist multi-term!"))))
   (define-key term-raw-map (kbd "M-n") 'ace-jump-mode))
 
+(defun multi-term-get-window-at-right-botton ()
+  "get the right botton window"
+  (window-at (- (frame-width) 2) (- (frame-height) 6)))
+
 ;; 只后当是term-mode并且是最后一行时才采用 (term-send-left)
-(defun ab/backward-char ()
+(defun multi-term-backward-char ()
   "Custom "
   (interactive)
-  (if (not (ab/is-term-mode))
+  (if (not (multi-term-is-term-mode))
       (backward-char)
-    (progn (if (not (ab/is-at-end-line))
+    (progn (if (not (multi-term-is-at-end-line))
                (backward-char)
              (progn (term-send-left)
                     (message "term-send-left"))))))
 
 ;; 只后当是term-mode并且是最后一行时才采用 (term-send-left)
-(defun ab/forward-char ()
+(defun multi-term-forward-char ()
   "Custom "
   (interactive)
-  (if (not (ab/is-term-mode))
+  (if (not (multi-term-is-term-mode))
       (forward-char)
-    (progn (if (not (ab/is-at-end-line))
+    (progn (if (not (multi-term-is-at-end-line))
                (forward-char)
              (progn (term-send-right)
                     (message "term-send-right"))))))
 
 ;; 当处于最后一行时 "C-a" 将光标移动到 terminal开始处而不是这个行的头
-(defun ab/move-beginning-of-line ()
+(defun multi-term-move-beginning-of-line ()
   "move begin"
   (interactive)
-  (if (not (ab/is-term-mode))
+  (if (not (multi-term-is-term-mode))
       (beginning-of-line)
-    (if (not (ab/is-at-end-line))
+    (if (not (multi-term-is-at-end-line))
         (beginning-of-line)
       (term-send-raw))))
 
@@ -91,30 +95,31 @@
   "kill current line"
   (interactive)
   (if (and (eq 'term-mode major-mode)
-           (ab/is-at-end-line))
+           (multi-term-is-at-end-line))
       (term-send-raw-string "\C-k")
     (kill-line)))
 
-(defun ab/delete-char ()
+(defun multi-term-delete-char ()
   "delete char"
   (interactive)
-  (if (ab/is-at-end-line)
+  (if (multi-term-is-at-end-line)
       (term-send-raw)
     (delete-char 1)))
 
 ;; 像intellij那样快速选择
-;; (defun ab/extend-selection ()
+;; (defun multi-term-extend-selection ()
 ;;   (interactive)
-;;   (if (not (ab/is-term-mode))
+;;   (if (not (multi-term-is-term-mode))
 ;;       (extend-selection)
-;;     (progn (if (ab/is-at-end-line)
+;;     (progn (if (multi-term-is-at-end-line)
 ;;                (term-send-raw)
 ;;              (extend-selection)))))
-(defun ab/extend-selection ()
+(defun multi-term-extend-selection ()
   (interactive)
   (term-send-raw-string "\C-l"))
 
-;; Use Emacs terminfo, not system terminfo, mac系统出现了4m
+;; Use Emacs terminfo, not system terminfo, for macos 4m
+;; mac系统出现了4m
 (setq system-uses-terminfo nil)
 
 ;; 下面设置一些快捷键
@@ -123,16 +128,17 @@
             ;; 下面设置multi-term buffer的长度无限
             (global-set-key (kbd "C-k") 'multi-term-kill-line)
             (setq term-buffer-maximum-size 0)
+            (add-to-list 'term-bind-key-alist '("C-{" . multi-term-find))
             (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
             (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
-            (add-to-list 'term-bind-key-alist '("C-a" . ab/move-beginning-of-line))
+            (add-to-list 'term-bind-key-alist '("C-a" . multi-term-move-beginning-of-line))
             (add-to-list 'term-bind-key-alist '("M-k" . multi-term-kill-line))
             (add-to-list 'term-bind-key-alist '("C-k" . multi-term-kill-line))
             (add-to-list 'term-bind-key-alist '("C-j" . multi-term-find))
-            (add-to-list 'term-bind-key-alist '("C-d" . ab/delete-char))
-            (add-to-list 'term-bind-key-alist '("C-b" . ab/backward-char))
-            (add-to-list 'term-bind-key-alist '("C-f" . ab/forward-char))
-            (add-to-list 'term-bind-key-alist '("M-l" . ab/extend-selection)) ;; error
+            (add-to-list 'term-bind-key-alist '("C-d" . multi-term-delete-char))
+            (add-to-list 'term-bind-key-alist '("C-b" . multi-term-backward-char))
+            (add-to-list 'term-bind-key-alist '("C-f" . multi-term-forward-char))
+            (add-to-list 'term-bind-key-alist '("M-l" . multi-term-extend-selection)) ;; error
             (setq show-trailing-whitespace nil)))
 
 ;; 初始化启动的时候打开一个terminal
