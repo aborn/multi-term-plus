@@ -106,17 +106,10 @@
       (term-send-raw)
     (delete-char 1)))
 
-;; 像intellij那样快速选择
-;; (defun multi-term-extend-selection ()
-;;   (interactive)
-;;   (if (not (multi-term-is-term-mode))
-;;       (extend-selection)
-;;     (progn (if (multi-term-is-at-end-line)
-;;                (term-send-raw)
-;;              (extend-selection)))))
-(defun multi-term-extend-selection ()
+(defun multi-term-expand-region ()
+  "Wrap er/expand-region fun."
   (interactive)
-  (term-send-raw-string "\C-l"))
+  (er/expand-region 1))
 
 ;; Use Emacs terminfo, not system terminfo, for macos 4m
 ;; mac系统出现了4m
@@ -138,7 +131,7 @@
             (add-to-list 'term-bind-key-alist '("C-d" . multi-term-delete-char))
             (add-to-list 'term-bind-key-alist '("C-b" . multi-term-backward-char))
             (add-to-list 'term-bind-key-alist '("C-f" . multi-term-forward-char))
-            (add-to-list 'term-bind-key-alist '("M-l" . multi-term-extend-selection)) ;; error
+            (add-to-list 'term-bind-key-alist '("M-l" . multi-term-expand-region))
             (setq show-trailing-whitespace nil)))
 
 ;; 初始化启动的时候打开一个terminal
