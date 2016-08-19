@@ -15,3 +15,4 @@ multi-term-find
 ```elisp
 multi-term-kill-line
 ```
+* Auto recover previous term buffers.  
