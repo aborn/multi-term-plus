@@ -19,6 +19,8 @@
 (add-to-list 'term-bind-key-alist '("C-k"))
 (add-to-list 'term-bind-key-alist '("M-n"))  ;; 这句不起作用
 
+(defvar multi-term-recover-alist '())
+
 (defcustom multi-term-recovery-p t
   "Is need to recover previous term buffers when emacs bootup."
   :type 'boolean
@@ -159,8 +161,7 @@
     (let ((buf (car (assoc-default key collection))))
       (when (bufferp buf)
         (message "switch to buffer %s" (buffer-name buf))
-        (switch-to-buffer buf)))
-    ))
+        (switch-to-buffer buf)))))
 
 (defun multi-term-create (name)
   "Create new term NAME"
@@ -169,14 +170,44 @@
     (message "old=%s dir=%s" old default-directory)
     (multi-term)))
 
+(defun multi-term-get-recover-alist ()
+  "Product multi-term recover alist."
+  (mapcar (lambda (elt)
+            (save-current-buffer
+              (set-buffer elt)
+              (cons (buffer-name)  default-directory)
+              ))
+          multi-term-buffer-list))
+
+;; multi-term-recover-alist
+(defun multi-term-save-term-alist ()
+  "Svae term alist."
+  (aborn/log "save it")
+  (setq multi-term-recover-alist (multi-term-get-recover-alist))
+  (with-temp-buffer
+    (insert
+     ";; -*- mode: emacs-lisp -*-\n"
+     ";; Opened multi-term alist used for recovery.\n")
+    (prin1 `(setq multi-term-recover-alist ',multi-term-recover-alist)
+           (current-buffer))
+    (write-region (point-min) (point-max) "~/.emacs.d/.multi-term-recover-alist" nil
+                  (unless arg 'quiet))))
+
 (defun multi-term-recover-terms ()
   "Recover multi-term previous buffers."
   (when multi-term-recovery-p
     (message "recovery multi-term previous buffers.")
-    (multi-term-create "~/github/eeb")))
+    (dolist (elt multi-term-recover-alist)
+      (multi-term-create (cdr elt)))))
 
 ;; 初始化启动的时候打开一个terminal
-(get-term)
-(multi-term-recover-terms)
+(defun multi-term-init ()
+  (add-hook 'kill-emacs-hook
+            'multi-term-save-term-alist)
+  (message "multi-term-init execute.")
+  (when (file-readable-p "~/.emacs.d/.multi-term-recover-alist")
+    (load-file "~/.emacs.d/.multi-term-recover-alist"))
+  (multi-term-recover-terms))
 
+(multi-term-init)
 (provide 'multi-term-config)
