@@ -19,6 +19,11 @@
 (add-to-list 'term-bind-key-alist '("C-k"))
 (add-to-list 'term-bind-key-alist '("M-n"))  ;; 这句不起作用
 
+(defcustom multi-term-recovery-p t
+  "Is need to recover previous term buffers when emacs bootup."
+  :type 'boolean
+  :group 'multi-term)
+
 (defun multi-term-is-at-end-line ()
   "判断是否在最后一行"
   (equal (line-number-at-pos) (count-lines (point-min) (point-max))))
@@ -134,9 +139,6 @@
             (add-to-list 'term-bind-key-alist '("M-l" . multi-term-expand-region))
             (setq show-trailing-whitespace nil)))
 
-;; 初始化启动的时候打开一个terminal
-(get-term)
-
 (defun multi-term--buffer-name-list ()
   (mapcar (lambda (elt)
             (save-current-buffer
@@ -159,5 +161,22 @@
         (message "switch to buffer %s" (buffer-name buf))
         (switch-to-buffer buf)))
     ))
+
+(defun multi-term-create (name)
+  "Create new term NAME"
+  (let ((old default-directory))
+    (setq default-directory name)
+    (message "old=%s dir=%s" old default-directory)
+    (multi-term)))
+
+(defun multi-term-recover-terms ()
+  "Recover multi-term previous buffers."
+  (when multi-term-recovery-p
+    (message "recovery multi-term previous buffers.")
+    (multi-term-create "~/github/eeb")))
+
+;; 初始化启动的时候打开一个terminal
+(get-term)
+(multi-term-recover-terms)
 
 (provide 'multi-term-config)
