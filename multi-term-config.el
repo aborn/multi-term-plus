@@ -54,7 +54,6 @@
 (add-to-list 'term-bind-key-alist '("C-o"))
 ;; (add-to-list 'term-bind-key-alist '("M-f"))
 ;; (add-to-list 'term-bind-key-alist '("M-b"))
-(add-to-list 'term-bind-key-alist '("M-n"))
 
 ;; for fast switch to multi-term sessions.
 (global-set-key (kbd "C-{") 'multi-term-find)
@@ -64,6 +63,7 @@
           (lambda ()
             ;; 下面设置multi-term buffer的长度无限
             (setq term-buffer-maximum-size 0)
+            (add-to-list 'term-bind-key-alist '("M-n" . ace-jump-mode))
             (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
             (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
             (add-to-list 'term-bind-key-alist '("C-a" . multi-term-move-beginning-of-line))
@@ -77,4 +77,5 @@
             (setq show-trailing-whitespace nil)))
 
 (multi-term-plus-init)
+(define-key term-raw-map (kbd "M-n") 'ace-jump-mode)
 (provide 'multi-term-config)
