@@ -10,6 +10,7 @@ More detail config please ref [multi-term-config.el](./multi-term-config.el)
 
 ## Extensions
 * fast switch when you open multi-terms.  
+![](images/find.png "multi-term-find.")  
 ```elisp
 multi-term-find
 ```
