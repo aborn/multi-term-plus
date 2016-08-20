@@ -11,13 +11,9 @@
 ;; some basic configuration
 (setq multi-term-program "/bin/zsh")   ;; 设置shell
 (setq multi-term-buffer-name "mterm")  ;; 设置buffer名字ls
-(add-to-list 'term-bind-key-alist '("C-j"))
-(add-to-list 'term-bind-key-alist '("C-o"))
-(add-to-list 'term-bind-key-alist '("C-e"))
-;;(add-to-list 'term-bind-key-alist '("M-f"))
-;;(add-to-list 'term-bind-key-alist '("M-b"))
-(add-to-list 'term-bind-key-alist '("C-k"))
-(add-to-list 'term-bind-key-alist '("M-n"))  ;; 这句不起作用
+
+;; Use Emacs terminfo, not system terminfo, for macOS 4m
+(setq system-uses-terminfo nil)
 
 (defun multi-term-debug ()
   "Only for debug."
@@ -49,16 +45,23 @@
   "get the right botton window"
   (window-at (- (frame-width) 2) (- (frame-height) 6)))
 
-;; Use Emacs terminfo, not system terminfo, for macOS 4m
-(setq system-uses-terminfo nil)
+(add-to-list 'term-bind-key-alist '("C-j"))
+(add-to-list 'term-bind-key-alist '("C-o"))
+(add-to-list 'term-bind-key-alist '("C-e"))
+;;(add-to-list 'term-bind-key-alist '("M-f"))
+;;(add-to-list 'term-bind-key-alist '("M-b"))
+(add-to-list 'term-bind-key-alist '("C-k"))
+(add-to-list 'term-bind-key-alist '("M-n"))  ;; 这句不起作用
+
+;; for fast switch to multi-term sessions.
+(global-set-key (kbd "C-{") 'multi-term-find)
+(global-set-key (kbd "C-k") 'multi-term-kill-line)
 
 ;; Some hot-key im term-mode
 (add-hook 'term-mode-hook
           (lambda ()
             ;; 下面设置multi-term buffer的长度无限
-            (global-set-key (kbd "C-k") 'multi-term-kill-line)
             (setq term-buffer-maximum-size 0)
-            (add-to-list 'term-bind-key-alist '("C-{" . multi-term-find))
             (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
             (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
             (add-to-list 'term-bind-key-alist '("C-a" . multi-term-move-beginning-of-line))
