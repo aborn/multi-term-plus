@@ -47,20 +47,17 @@
   (define-key term-raw-map (kbd "M-n") 'ace-jump-mode))
 
 (defun multi-term-get-window-at-right-botton ()
-  "get the right botton window"
+  "Get the right botton window"
   (window-at (- (frame-width) 2) (- (frame-height) 6)))
 
 (add-to-list 'term-bind-key-alist '("C-j"))
 (add-to-list 'term-bind-key-alist '("C-o"))
-(add-to-list 'term-bind-key-alist '("C-e"))
-;;(add-to-list 'term-bind-key-alist '("M-f"))
-;;(add-to-list 'term-bind-key-alist '("M-b"))
-(add-to-list 'term-bind-key-alist '("C-k"))
-(add-to-list 'term-bind-key-alist '("M-n"))  ;; 这句不起作用
+;; (add-to-list 'term-bind-key-alist '("M-f"))
+;; (add-to-list 'term-bind-key-alist '("M-b"))
+(add-to-list 'term-bind-key-alist '("M-n"))
 
 ;; for fast switch to multi-term sessions.
 (global-set-key (kbd "C-{") 'multi-term-find)
-(global-set-key (kbd "C-k") 'multi-term-kill-line)
 
 ;; Some hot-key im term-mode
 (add-hook 'term-mode-hook
@@ -71,7 +68,6 @@
             (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
             (add-to-list 'term-bind-key-alist '("C-a" . multi-term-move-beginning-of-line))
             (add-to-list 'term-bind-key-alist '("C-e" . multi-term-move-end-of-line))
-            (add-to-list 'term-bind-key-alist '("M-k" . multi-term-kill-line))
             (add-to-list 'term-bind-key-alist '("C-k" . multi-term-kill-line))
             (add-to-list 'term-bind-key-alist '("C-j" . multi-term-find))
             (add-to-list 'term-bind-key-alist '("C-d" . multi-term-delete-char))

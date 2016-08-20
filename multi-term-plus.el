@@ -70,7 +70,8 @@
     (progn (if (not (multi-term-is-at-end-line))
                (backward-char)
              (progn (term-send-left)
-                    (message "term-send-left"))))))
+                    ;; (message "term-send-left")
+                    )))))
 
 (defun multi-term-forward-char ()
   "Forward-char in term-mode."
@@ -80,7 +81,8 @@
     (progn (if (not (multi-term-is-at-end-line))
                (forward-char)
              (progn (term-send-right)
-                    (message "term-send-right"))))))
+                    ;; (message "term-send-right")
+                    )))))
 
 (defun multi-term-move-beginning-of-line ()
   "Smart version of move-beginning-of-line in term-mode."
