@@ -60,7 +60,7 @@
 
 (defun multi-term-is-term-mode ()
   "Current is term-mode"
-  (string= major-mode "term-mode"))
+  (eq major-mode 'term-mode))
 
 (defun multi-term-backward-char ()
   "Backward-char in term-mode. "
