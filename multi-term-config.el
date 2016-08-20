@@ -22,6 +22,11 @@
       (message "screen width is %s" (display-pixel-width))
     (message "current os is %s. %d" system-type (display-pixel-width))))
 
+(defun aborn-show-mode ()
+  "Show major-mode."
+  (interactive)
+  (message "%s" major-mode))
+
 (defun last-term-buffer (l)
   "Return most recently used term buffer."
   (when l
@@ -65,6 +70,7 @@
             (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
             (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
             (add-to-list 'term-bind-key-alist '("C-a" . multi-term-move-beginning-of-line))
+            (add-to-list 'term-bind-key-alist '("C-e" . multi-term-move-end-of-line))
             (add-to-list 'term-bind-key-alist '("M-k" . multi-term-kill-line))
             (add-to-list 'term-bind-key-alist '("C-k" . multi-term-kill-line))
             (add-to-list 'term-bind-key-alist '("C-j" . multi-term-find))

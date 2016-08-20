@@ -91,6 +91,15 @@
         (beginning-of-line)
       (term-send-raw))))
 
+(defun multi-term-move-end-of-line ()
+  "Smart version of move-end-of-line in term-mode."
+  (interactive)
+  (if (not (multi-term-is-term-mode))
+      (move-end-of-line)
+    (if (not (multi-term-is-at-end-line))
+        (move-end-of-line)
+      (term-send-raw-string "\C-e"))))
+
 (defun multi-term-kill-line ()
   "Smart kill-line in multi-term mode."
   (interactive)
