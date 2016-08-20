@@ -10,7 +10,7 @@
 
 ;; some basic configuration
 (setq multi-term-program "/bin/zsh")   ;; 设置shell
-(setq multi-term-buffer-name "mterm")  ;; 设置buffer名字ls
+(setq multi-term-buffer-name "mterm")  ;; 设置buffer名字
 
 ;; Use Emacs terminfo, not system terminfo, for macOS 4m
 (setq system-uses-terminfo nil)
