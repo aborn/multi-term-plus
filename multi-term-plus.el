@@ -148,6 +148,8 @@
 (defun multi-term-create (name)
   "Create new term `NAME'"
   (let ((old default-directory))
+    (unless (file-exists-p name)
+      (error "path %s does't exists, failed." name))
     (setq default-directory name)
     (message "old=%s dir=%s" old default-directory)
     (multi-term)))
