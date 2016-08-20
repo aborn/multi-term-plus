@@ -3,8 +3,10 @@ File [multi-term.el](./multi-term.el) fork from [multi-term](https://www.emacswi
 And I do some customize work in [multi-term-plus.el](./multi-term-plus.el).
 
 ## Why for this?
-multi-term-config.el do some extensions for multi-term.
+[multi-term-plus.el](./multi-term-plus.el) do some extensions for multi-term.
 
+## How to use it?
+More detail config please ref [multi-term-config.el](./multi-term-config.el)
 
 ## Extensions
 * fast switch when you open multi-terms.  
