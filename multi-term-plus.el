@@ -5,7 +5,7 @@
 ;; Author: Aborn Jiang <aborn.jiang@gmail.com>
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (let-alist "1.0.3") (s "1.10.0"))
-;; Keywords: leanote, note, markdown
+;; Keywords: term, multi-term, multi-term-plus
 ;; Homepage: https://github.com/aborn/aborn-multi-term
 ;; URL: https://github.com/aborn/leanote-emacs
 
