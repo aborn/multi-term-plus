@@ -1,6 +1,6 @@
-# aborn-multi-term
+# multi-term-plus
 File [multi-term.el](./multi-term.el) fork from [multi-term](https://www.emacswiki.org/emacs/download/multi-term.el). 
-And I do some customize work in [multi-term-plus.el](./multi-term-plus.el).
+And I do some extension work in [multi-term-plus.el](./multi-term-plus.el).
 
 ## Why for this?
 [multi-term-plus.el](./multi-term-plus.el) do some extensions for multi-term.
@@ -23,7 +23,7 @@ multi-term-kill-line
 English version readme ends here. Chinese readme provided as follows.
 
 --------------------------------------------------------------------------------
-# aborn-multi-term
+# multi-term-plus
 multi-term.el这个文件是从[multi-term](https://www.emacswiki.org/emacs/download/multi-term.el)fork而来. 
 在这个基础上，我自己添加了一些新的功能在[multi-term-plus.el](./multi-term-plus.el)里。
 
