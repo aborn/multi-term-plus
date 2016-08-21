@@ -6,8 +6,8 @@
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.4") (cl-lib "0.5") (let-alist "1.0.3") (s "1.10.0") (multi-term "1.3"))
 ;; Keywords: term, multi-term, multi-term-plus
-;; Homepage: https://github.com/aborn/aborn-multi-term
-;; URL: https://github.com/aborn/leanote-emacs
+;; Homepage: https://github.com/aborn/multi-term-plus
+;; URL: https://github.com/aborn/multi-term-plus
 
 ;; This file is NOT part of GNU Emacs.
 

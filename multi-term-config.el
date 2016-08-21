@@ -1,31 +1,25 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; multi-term emacs terminal config
-;; emacs terminal 终端配置，在multi-term.el的基础上进行了优化
-;;   注：multi-term 采用的是 term-mode 这种模式有两种子模式
-;;     一种是 (term-char-mode) 像普通的shell
-;;     另一种是 (term-line-mode) 像普通的buffer
-;; 见： http://www.gnu.org/software/emacs/manual/html_node/emacs/Term-Mode.html
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Configurations for multi-term and multi-term-plus, modified it as your need.
+
+;; Copyright (C) 2016 Aborn Jiang
+
+;;; Notes:
+;; Depends on multi-term.el and multi-term-plus.el. Pls add those files
+;; in your load-path.
+;; 
+;;  multi-term major mode is term-mode, which has two sub-mode.
+;;     one (term-char-mode) it likes common shell.
+;;     another (term-line-mode) it likes common buffer.
+;; Refs. http://www.gnu.org/software/emacs/manual/html_node/emacs/Term-Mode.html
+
+(require 'multi-term)
 (require 'multi-term-plus)
 
-;; some basic configuration
-(setq multi-term-program "/bin/zsh")   ;; 设置shell
-(setq multi-term-buffer-name "mterm")  ;; 设置buffer名字
+;; Some basic configuration
+(setq multi-term-program "/bin/zsh")   ;; setting your shell, default bash
+(setq multi-term-buffer-name "mterm")  ;; setting term buffer name.
 
-;; Use Emacs terminfo, not system terminfo, for macOS 4m
+;; Use emacs terminfo, not system terminfo, for macOS 4m
 (setq system-uses-terminfo nil)
-
-(defun multi-term-debug ()
-  "Only for debug."
-  (interactive)
-  (if (equal (display-pixel-width) 1920)
-      (message "screen width is %s" (display-pixel-width))
-    (message "current os is %s. %d" system-type (display-pixel-width))))
-
-(defun aborn-show-mode ()
-  "Show major-mode."
-  (interactive)
-  (message "%s" major-mode))
 
 (defun last-term-buffer (l)
   "Return most recently used term buffer."
@@ -33,11 +27,16 @@
     (if (eq 'term-mode (with-current-buffer (car l) major-mode))
         (car l) (last-term-buffer (cdr l)))))
 
+(defun multi-term-use-right-botton-window ()
+  "Get the right botton window."
+  (window-at (- (frame-width) 2) (- (frame-height) 6)))
+
 (defun get-term ()
   "Switch to the term buffer last used, or create a new one if
     none exists, or if the current buffer is already a term."
   (interactive)
-  (select-window (multi-term-get-window-at-right-botton))   ;; 先切换到右边的窗口
+  ;; use right-botton window, modify as you need.
+  (select-window (multi-term-use-right-botton-window))
   (let ((b (last-term-buffer (buffer-list))))
     (if (or (not b) (eq 'term-mode major-mode))
         (progn (multi-term)
@@ -46,14 +45,9 @@
              (message "switch a exist multi-term!"))))
   (define-key term-raw-map (kbd "M-n") 'ace-jump-mode))
 
-(defun multi-term-get-window-at-right-botton ()
-  "Get the right botton window"
-  (window-at (- (frame-width) 2) (- (frame-height) 6)))
-
+;; Reserved key-binding, not used in multi-term mode.
 (add-to-list 'term-bind-key-alist '("C-j"))
 (add-to-list 'term-bind-key-alist '("C-o"))
-;; (add-to-list 'term-bind-key-alist '("M-f"))
-;; (add-to-list 'term-bind-key-alist '("M-b"))
 
 ;; for fast switch to multi-term sessions.
 (global-set-key (kbd "C-{") 'multi-term-find)
@@ -61,8 +55,7 @@
 ;; Some hot-key im term-mode
 (add-hook 'term-mode-hook
           (lambda ()
-            ;; 下面设置multi-term buffer的长度无限
-            (setq term-buffer-maximum-size 0)
+            (setq term-buffer-maximum-size 0)  ;; means no limitation.
             (add-to-list 'term-bind-key-alist '("M-n" . ace-jump-mode))
             (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
             (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
@@ -76,6 +69,9 @@
             (add-to-list 'term-bind-key-alist '("M-l" . multi-term-expand-region))
             (setq show-trailing-whitespace nil)))
 
+;; init multi-term-plus
 (multi-term-plus-init)
+
+;; ace-jump-mode key-binding
 (define-key term-raw-map (kbd "M-n") 'ace-jump-mode)
 (provide 'multi-term-config)
