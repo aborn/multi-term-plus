@@ -18,7 +18,7 @@ multi-term-find
 ```elisp
 multi-term-kill-line
 ```
-* Auto recover previous term buffers.  
+* Auto recover previous term buffers when emacs reopen.  
 
 English version readme ends here. Chinese readme provided as follows.
 
