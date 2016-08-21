@@ -192,3 +192,4 @@
   (message "multi-term-plus inited."))
 
 (provide 'multi-term-plus)
+;;; multi-term-plus.el ends here
