@@ -4,9 +4,9 @@ And I do some extensions in [multi-term-plus.el](./multi-term-plus.el).
 
 ## Why for this?
 The [multi-term](https://www.emacswiki.org/emacs/download/multi-term.el)
-only provide basic operations to term-mode. And C-a C-e C-k do not act as normal 
-terminal. So, [multi-term-plus.el](./multi-term-plus.el) do that feature extensions.
-What's more, it provides recover previous term when emacs reopen and fast switch between terms.
+only provides basic operations in term-mode. And *C-a C-e C-k C-d* do not act as normal 
+terminal. So, [multi-term-plus.el](./multi-term-plus.el) implements those features.
+What's more, it can recover previous term when emacs reopen and fast switch between terms.
 
 ## How to use it?
 * Download multi-term-plus files via curl:
@@ -18,15 +18,15 @@ $ sh -c "$(curl -fsSL https://raw.github.com/aborn/multi-term-plus/master/script
 (add-to-list 'load-path "~/multi-term-plus")
 (require 'multi-term-config)
 ```
-* For detail config, please ref [multi-term-config.el](./multi-term-config.el). Please modify it as you need.
+* For detail configuration, please ref [multi-term-config.el](./multi-term-config.el). Modify it as you need.
 
 ## Extensions
-* fast switch when you open multi-terms.  
+* Fast term switch when you open multi terms (key binding: **C-{**).  
 ![](images/find.png "multi-term-find.")  
 ```elisp
 multi-term-find
 ```
-* Smart kill-line in multi-term mode.  
+* Act as normal terminal using kill-line in term-mode (key binding: **C-k**).  
 ```elisp
 multi-term-kill-line
 ```
