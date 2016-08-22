@@ -41,8 +41,8 @@ multi-term.el这个文件是从[multi-term](https://www.emacswiki.org/emacs/down
 
 ## 为什么要做这个工作？
 原生的multi-term.el功能不是很完善，像C-e C-a C-k C-d这些功能表现得跟正常的terminal不一样。
-所以才有了[multi-term-plus.el](./multi-term-plus.el)这个扩展。它提供了在不同tems里快速
-切换的功能，同时当emacs再次启动的时候，也能恢复上一次打开的terms。
+所以才有了[multi-term-plus.el](./multi-term-plus.el)这个扩展。它不仅提供了在不同terms里快速
+切换的能力，同时当emacs再次启动的时候，也能恢复上一次打开的terms。
 
 ## 怎样安装？
 * 通过curl的方式下载需要的文件：
