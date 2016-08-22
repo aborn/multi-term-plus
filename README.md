@@ -30,7 +30,11 @@ multi-term-find
 ```elisp
 multi-term-kill-line
 ```
-* Auto recover previous term buffers when emacs reopen.  
+* Auto recover previous term buffers when emacs reopen. Add follow code to your 
+emacs init file if you don't need the recovery feature.
+```elisp
+(setq multi-term-recovery-p nil)
+```
 
 English version readme ends here. Chinese readme provided as follows.
 
@@ -44,8 +48,8 @@ multi-term.el这个文件是从[multi-term](https://www.emacswiki.org/emacs/down
 所以才有了[multi-term-plus.el](./multi-term-plus.el)这个扩展。它不仅提供了在不同terms里快速
 切换的能力，同时当emacs再次启动的时候，也能恢复上一次打开的terms。
 
-## 怎样安装？
-* 通过curl的方式下载需要的文件：
+## 如何安装？
+* 通过curl的方式下载需要的文件(机器需要安装git)：
 ```shell
 $ sh -c "$(curl -fsSL https://raw.github.com/aborn/multi-term-plus/master/scripts/install.sh)"
 ```
@@ -62,11 +66,11 @@ $ sh -c "$(curl -fsSL https://raw.github.com/aborn/multi-term-plus/master/script
 ```elisp
 multi-term-find
 ```
-* 智能的kill-line操作  
+* 智能的kill-line操作，绑定到**C-k**，像在普通的terminal里操作一样  
 ```elisp
 multi-term-kill-line
 ```
-* 再次打开emacs时，会自动恢复上一次的几个multi-term，如果不需要这个功能可以通过设置**multi-term-recovery-p**值为nil来关闭该功能。  
+* 再次打开emacs时，会自动恢复上一次的几个multi-term。如果不需要这个功能可以通过设置**multi-term-recovery-p**值为nil来关闭该功能。  
 ```elisp
 (setq multi-term-recovery-p nil)
 ```
