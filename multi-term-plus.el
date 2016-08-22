@@ -170,7 +170,6 @@
 
 (defun multi-term-save-term-alist ()
   "Save multi-term-recover-alist to file."
-  (aborn/log "save it")
   (setq multi-term-recover-alist (multi-term-get-recover-alist))
   (with-temp-buffer
     (insert
