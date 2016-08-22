@@ -72,6 +72,15 @@
 ;; init multi-term-plus
 (multi-term-plus-init)
 
+;; company-term not finished.
+;; (require 'company-term)
+;; (company-term-setup)
+;; (add-hook 'after-init-hook 'global-company-mode)
+;; (add-hook 'multi-term-recover-hook
+;;          #'(lambda ()
+;;              (company-mode)
+;;              (add-to-list 'company-backends 'company-term)))
+
 ;; ace-jump-mode key-binding
 (define-key term-raw-map (kbd "M-n") 'ace-jump-mode)
 (provide 'multi-term-config)

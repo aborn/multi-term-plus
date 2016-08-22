@@ -55,6 +55,11 @@
   :type 'string
   :group 'multi-term)
 
+(defcustom multi-term-recover-hook '()
+  "Called upon entry into leanote mode."
+  :type 'hook
+  :group 'multi-term)
+
 (defun multi-term-is-at-end-line ()
   "Cursor is in last line."
   (equal (line-number-at-pos) (count-lines (point-min) (point-max))))
@@ -186,7 +191,8 @@
   (when multi-term-recovery-p
     (message "recovery multi-term previous buffers.")
     (dolist (elt multi-term-recover-alist)
-      (multi-term-create (cdr elt)))))
+      (multi-term-create (cdr elt))
+      (run-hooks 'multi-term-recover-hook))))
 
 (defun multi-term-plus-init ()
   "Recover previous term sessions when emacs bootup."
