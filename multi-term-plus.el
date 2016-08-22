@@ -178,7 +178,7 @@
     (prin1 `(setq multi-term-recover-alist ',multi-term-recover-alist)
            (current-buffer))
     (write-region (point-min) (point-max) multi-term-recover-alist-file nil
-                  (unless arg 'quiet))))
+                  'quiet)))
 
 (defun multi-term-recover-terms ()
   "Recover multi-term previous buffers."
