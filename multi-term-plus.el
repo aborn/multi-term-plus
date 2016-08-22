@@ -98,9 +98,10 @@
   "Smart version of move-end-of-line in term-mode."
   (interactive)
   (if (not (multi-term-is-term-mode))
-      (move-end-of-line)
+      (move-end-of-line nil)
     (if (not (multi-term-is-at-end-line))
-        (move-end-of-line)
+        (progn
+          (move-end-of-line nil))
       (term-send-raw-string "\C-e"))))
 
 (defun multi-term-kill-line ()
