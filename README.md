@@ -6,7 +6,16 @@ And I do some extension work in [multi-term-plus.el](./multi-term-plus.el).
 [multi-term-plus.el](./multi-term-plus.el) do some extensions for multi-term.
 
 ## How to use it?
-More detail config please ref [multi-term-config.el](./multi-term-config.el)
+* Download multi-term-plus files via curl:
+```
+$ sh -c "$(curl -fsSL https://raw.github.com/aborn/multi-term-plus/master/scripts/install.sh)"
+```
+* Add following code to your emacs init file:
+```
+(add-to-list 'load-path "~/multi-term-plus")
+(require 'multi-term-config)
+```
+For detail config, please ref [multi-term-config.el](./multi-term-config.el)
 
 ## Extensions
 * fast switch when you open multi-terms.  
