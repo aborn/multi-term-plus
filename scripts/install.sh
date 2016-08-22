@@ -6,7 +6,7 @@ main() {
         echo " (add-to-list 'load-path \"~/multi-term-plus\")"
         echo " (require 'multi-term-config)"
     else
-        echo "direcotry ${DIRECTORY} already exist."
+        echo "direcotry ${DIRECTORY} already exists."
     fi
 }
 
