@@ -56,7 +56,7 @@
   :group 'multi-term)
 
 (defcustom multi-term-recover-hook '()
-  "Called upon entry into leanote mode."
+  "Called when each term recover."
   :type 'hook
   :group 'multi-term)
 
