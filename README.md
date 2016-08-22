@@ -44,9 +44,9 @@ multi-term.el这个文件是从[multi-term](https://www.emacswiki.org/emacs/down
 在这个基础上，我自己添加了一些新的功能在[multi-term-plus.el](./multi-term-plus.el)里。
 
 ## 为什么要做这个工作？
-原生的multi-term.el功能不是很完善，像C-e C-a C-k C-d这些功能表现得跟正常的terminal不一样。
+原生的multi-term.el功能不是很完善，像*C-e C-a C-k C-d*这些功能表现得跟正常的terminal不一样。
 所以才有了[multi-term-plus.el](./multi-term-plus.el)这个扩展。它不仅提供了在不同terms里快速
-切换的能力，同时当emacs再次启动的时候，也能恢复上一次打开的terms。
+切换的能力，同时当emacs再次启动的时候，也能恢复上一次打开的terminals。
 
 ## 如何安装？
 * 通过curl的方式下载需要的文件(机器需要安装git)：
@@ -58,7 +58,7 @@ $ sh -c "$(curl -fsSL https://raw.github.com/aborn/multi-term-plus/master/script
 (add-to-list 'load-path "~/multi-term-plus")
 (require 'multi-term-config)
 ```
-* 更详细的配置请参考我的配置 [multi-term-config.el](./multi-term-config.el),请按自己需要进行修改!
+* 更详细的配置请参考我的配置 [multi-term-config.el](./multi-term-config.el),请按自己需要进行相应修改!
 
 ## 功能点
 * 快速切换到不同的multi-terms（绑定到**C-{**这个快捷键里）   
