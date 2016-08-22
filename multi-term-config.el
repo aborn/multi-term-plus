@@ -3,20 +3,21 @@
 ;; Copyright (C) 2016 Aborn Jiang
 
 ;;; Notes:
-;; Depends on multi-term.el and multi-term-plus.el. Pls add those files
-;; in your load-path.
-;; 
+;;  First of all, add multi-term.el and multi-term-plus.el to your load-path
+;;
+;;  Others: 
 ;;  multi-term major mode is term-mode, which has two sub-mode.
 ;;     one (term-char-mode) it likes common shell.
 ;;     another (term-line-mode) it likes common buffer.
 ;; Refs. http://www.gnu.org/software/emacs/manual/html_node/emacs/Term-Mode.html
 
+;;; Code:
 (require 'multi-term)
 (require 'multi-term-plus)
 
 ;; Some basic configuration
-(setq multi-term-program "/bin/zsh")   ;; setting your shell, default bash
-(setq multi-term-buffer-name "mterm")  ;; setting term buffer name.
+(setq multi-term-program "/bin/zsh")   ;; shell-type setting, default bash.
+(setq multi-term-buffer-name "mterm")  ;; term buffer name setting.
 
 ;; Use emacs terminfo, not system terminfo, for macOS 4m
 (setq system-uses-terminfo nil)
@@ -84,3 +85,4 @@
 ;; ace-jump-mode key-binding
 (define-key term-raw-map (kbd "M-n") 'ace-jump-mode)
 (provide 'multi-term-config)
+;;; multi-term-config.el ends here
