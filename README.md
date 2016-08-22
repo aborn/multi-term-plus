@@ -1,9 +1,12 @@
 # multi-term-plus
 File [multi-term.el](./multi-term.el) fork from [multi-term](https://www.emacswiki.org/emacs/download/multi-term.el). 
-And I do some extension work in [multi-term-plus.el](./multi-term-plus.el).
+And I do some extensions in [multi-term-plus.el](./multi-term-plus.el).
 
 ## Why for this?
-[multi-term-plus.el](./multi-term-plus.el) do some extensions for multi-term.
+The [multi-term](https://www.emacswiki.org/emacs/download/multi-term.el)
+only provide basic operations to term-mode. And C-a C-e C-k do not act as normal 
+terminal. So, [multi-term-plus.el](./multi-term-plus.el) do that feature extensions.
+What's more, it provides recover previous term when emacs reopen and fast switch between terms.
 
 ## How to use it?
 * Download multi-term-plus files via curl:
@@ -15,7 +18,7 @@ $ sh -c "$(curl -fsSL https://raw.github.com/aborn/multi-term-plus/master/script
 (add-to-list 'load-path "~/multi-term-plus")
 (require 'multi-term-config)
 ```
-* For detail config, please ref [multi-term-config.el](./multi-term-config.el). Please modify it as you want.
+* For detail config, please ref [multi-term-config.el](./multi-term-config.el). Please modify it as you need.
 
 ## Extensions
 * fast switch when you open multi-terms.  
@@ -37,7 +40,9 @@ multi-term.el这个文件是从[multi-term](https://www.emacswiki.org/emacs/down
 在这个基础上，我自己添加了一些新的功能在[multi-term-plus.el](./multi-term-plus.el)里。
 
 ## 为什么要做这个工作？
-原生的multi-term.el功能不是很完善，像C-e C-a C-k这些功能也不够智能，所以才有了multi-term-plus.el，也不能很好地快速切换term。
+原生的multi-term.el功能不是很完善，像C-e C-a C-k C-d这些功能表现得跟正常的terminal不一样。
+所以才有了[multi-term-plus.el](./multi-term-plus.el)这个扩展。它提供了在不同tems里快速
+切换的功能，同时当emacs再次启动的时候，也能恢复上一次打开的terms。
 
 ## 怎样安装？
 * 通过curl的方式下载需要的文件：
