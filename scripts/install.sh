@@ -1,6 +1,6 @@
 main() {
     echo "Current directory: `pwd`"
-    DIRECTORY="~/multi-term-plus"
+    DIRECTORY="${HOME}/multi-term-plus"
     if [ ! -d "$DIRECTORY" ]; then
         echo "git clone https://github.com/aborn/multi-term-plus.git ${DIRECTORY}"
         git clone https://github.com/aborn/multi-term-plus.git $DIRECTORY
