@@ -131,11 +131,13 @@
 
 (defun multi-term--buffer-name-list ()
   "Multi-term session list."
-  (let ((multi-term-filter-buffer-list
-         (cl-remove-if-not
-          #'(lambda (x)
-              (not (eq (current-buffer) x)))
-          multi-term-buffer-list)))
+  (let* ((all-list (buffer-list))
+         (multi-term-filter-buffer-list
+          (cl-remove-if-not
+           #'(lambda (x)
+               (and (member x multi-term-buffer-list)
+                    (not (eq (current-buffer) x))))
+           all-list)))
     (mapcar (lambda (elt)
               (save-current-buffer
                 (set-buffer elt)
