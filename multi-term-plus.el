@@ -152,6 +152,8 @@
   (let* ((collection nil)
          (key nil))
     (setq collection (multi-term--buffer-name-list))
+    (setq ab/debug collection)
+    (setq ab/debug2 this-command)
     (setq key (completing-read "find multi-term by name: "
                                collection))
     (let ((buf (car (assoc-default key collection))))

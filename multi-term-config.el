@@ -73,6 +73,9 @@
 ;; init multi-term-plus
 (multi-term-plus-init)
 
+;; if you use ivy's ivy-completing-read for completing-read-function, add following code.
+;; (add-to-list 'ivy-sort-functions-alist '(t . nil))  ;; use it as you need
+
 ;; company-term not finished.
 ;; (require 'company-term)
 ;; (company-term-setup)
