@@ -75,3 +75,6 @@ multi-term-kill-line
 (setq multi-term-recovery-p nil)
 ```
 
+## 详情
+更多详情，请参考我写的这篇博客[emacs 使用multi-term](http://www.jianshu.com/p/2c1ac913d2cb)。
+
