@@ -75,6 +75,14 @@
 
 ;; if you use ivy's ivy-completing-read for completing-read-function, add following code.
 ;; (add-to-list 'ivy-sort-functions-alist '(t . nil))  ;; use it as you need
+;;
+;; or defun your owner sort function.
+;; (defun aborn/multi-term-find-sort (x y)
+;;   "customize multi-term-find sort function."
+;;   (message "customize the sort function.")
+;;   (string< x y))
+;; (add-to-list 'ivy-sort-functions-alist
+;;              '(multi-term-find . aborn/multi-term-find-sort))
 
 ;; company-term not finished.
 ;; (require 'company-term)
