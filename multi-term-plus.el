@@ -131,29 +131,29 @@
 
 (defun multi-term--buffer-name-list ()
   "Multi-term session list."
-  (let* ((all-list (buffer-list))
-         (multi-term-filter-buffer-list
+  (let* ((multi-term-filter-buffer-list
           (cl-remove-if-not
            #'(lambda (x)
                (and (member x multi-term-buffer-list)
                     (not (eq (current-buffer) x))))
-           all-list)))
+           (buffer-list))))
     (mapcar (lambda (elt)
               (save-current-buffer
                 (set-buffer elt)
                 (let (name)
-                  (setq name (format "%s@%s" (buffer-name elt) default-directory))
+                  (setq ab/debug3 default-directory)
+                  (setq name (format "%s@%s"
+                                     (decode-coding-string (buffer-name elt) 'utf-8)
+                                     (decode-coding-string default-directory 'utf-8)))
                   (list name elt))))
             multi-term-filter-buffer-list)))
 
 (defun multi-term-find ()
   "Find multi-term by name, and switch it!"
   (interactive)
-  (let* ((collection nil)
-         (key nil))
+  (let* (collection key)
     (setq collection (multi-term--buffer-name-list))
-    (setq ab/debug collection)
-    (setq ab/debug2 this-command)
+    ;; (setq ab/debug this-command)    ;; only for debug
     (setq key (completing-read "find multi-term by name: "
                                collection))
     (let ((buf (car (assoc-default key collection))))
