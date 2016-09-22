@@ -143,7 +143,8 @@
                 (let (name)
                   (setq ab/debug3 default-directory)
                   (setq name (format "%s@%s"
-                                     (decode-coding-string (buffer-name elt) 'utf-8)
+                                     (
+                                      decode-coding-string (buffer-name elt) 'utf-8)
                                      (decode-coding-string default-directory 'utf-8)))
                   (list name elt))))
             multi-term-filter-buffer-list)))
@@ -156,10 +157,15 @@
     ;; (setq ab/debug this-command)    ;; only for debug
     (setq key (completing-read "find multi-term by name: "
                                collection))
-    (let ((buf (car (assoc-default key collection))))
-      (when (bufferp buf)
-        (message "switch to buffer %s" (buffer-name buf))
-        (switch-to-buffer buf)))))
+    (let* ((buf (car (assoc-default key collection)))
+           (bufwind (get-buffer-window buf)))
+      (if (and bufwind (window-valid-p bufwind))
+          (progn
+            (message "switch to window %s" (buffer-name buf))
+            (select-window bufwind))
+        (when (bufferp buf)
+          (message "switch to buffer %s" (buffer-name buf))
+          (switch-to-buffer buf))))))
 
 (defun multi-term-create (name)
   "Create new term `NAME'"
