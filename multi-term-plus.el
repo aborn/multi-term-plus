@@ -173,7 +173,7 @@
     (unless (file-exists-p name)
       (error "path %s does't exists, failed." name))
     (setq default-directory name)
-    (message "old=%s dir=%s" old default-directory)
+    ;; (message "old=%s dir=%s" old default-directory)
     (multi-term)))
 
 (defun multi-term-get-recover-alist ()
