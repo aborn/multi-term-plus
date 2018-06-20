@@ -206,6 +206,8 @@
 
 (defun multi-term-plus-init ()
   "Recover previous term sessions when emacs bootup."
+  (when (version<= "26.1" emacs-version)               ;; emacs 26.1, t default
+    (setq term-char-mode-point-at-process-mark nil))
   (add-hook 'kill-emacs-hook
             'multi-term-save-term-alist)
   (when (file-readable-p multi-term-recover-alist-file)
