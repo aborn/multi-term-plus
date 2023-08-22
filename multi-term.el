@@ -118,6 +118,126 @@
 ;; `multi-term-dedicated-max-window-height' the max height limit that dedicated
 ;; window is allowed.
 ;;
+;;; multi-term.el --- Managing multiple terminal buffers in Emacs.
+
+;; Author: Andy Stewart <lazycat.manatee@gmail.com>
+;; Maintainer: Andy Stewart <lazycat.manatee@gmail.com>
+;; Copyright (C) 2008 ~ 2016 Andy Stewart, all rights reserved.
+;; Copyright (C) 2010, ahei, all rights reserved.
+;; Created: <2008-09-19 23:02:42>
+;; Version: 1.5
+;; Last-Updated: Mon May 11 10:46:18 2020 (-0400)
+;; URL: http://www.emacswiki.org/emacs/download/multi-term.el
+;; Keywords: term, terminal, multiple buffer
+;; Compatibility: GNU Emacs 23.2.1, GNU Emacs 24.4 (and prereleases)
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth
+;; Floor, Boston, MA 02110-1301, USA.
+
+;; Features that might be required by this library:
+;;
+;;  `term' `cl-lib' `advice'
+;;
+
+;;; Commentary:
+;;
+;; This package is for creating and managing multiple terminal buffers in Emacs.
+;;
+;; By default, term.el provides a great terminal emulator in Emacs.
+;; But I have some troubles with term-mode:
+;;
+;; 1. term.el just provides commands `term' or `ansi-term'
+;;    for creating a terminal buffer.
+;;    And there is no special command to create or switch
+;;    between multiple terminal buffers quickly.
+;;
+;; 2. By default, the keystrokes of term.el conflict with global-mode keystrokes,
+;;    which makes it difficult for the user to integrate term.el with Emacs.
+;;
+;; 3. By default, executing *NIX command “exit” from term-mode,
+;;    it will leave an unused buffer.
+;;
+;; 4. term.el won’t quit running sub-process when you kill terminal buffer forcibly.
+;;
+;; 5. Haven’t a dedicated window for debug program.
+;;
+;; And multi-term.el is enhanced with those features.
+;;
+
+;;; Installation:
+;;
+;; Copy multi-term.el to your load-path and add to your ~/.emacs
+;;
+;;  (require 'multi-term)
+;;
+;; And setup program that `multi-term' will need:
+;;
+;; (setq multi-term-program "/bin/bash")
+;;
+;;      or setup like me "/bin/zsh" ;)
+;;
+;; Below are the commands you can use:
+;;
+;;      `multi-term'                    Create a new term buffer.
+;;      `multi-term-next'               Switch to next term buffer.
+;;      `multi-term-prev'               Switch to previous term buffer.
+;;      `multi-term-dedicated-open'     Open dedicated term window.
+;;      `multi-term-dedicated-close'    Close dedicated term window.
+;;      `multi-term-dedicated-toggle'   Toggle dedicated term window.
+;;      `multi-term-dedicated-select'   Select dedicated term window.
+;;
+;; Tips:
+;;
+;;      You can type `C-u' before command `multi-term' or `multi-term-dedicated-open'
+;;      then will prompt you shell name for creating terminal buffer.
+;;
+
+;;; Customize:
+;;
+;; `multi-term-program' default is nil, so when creating new term buffer,
+;; send environment variable of `SHELL' (`ESHELL', `/bin/sh') to `make-term'.
+;;
+;; And you can set it to your liking, like me: ;-)
+;;
+;; (setq multi-term-program "/bin/zsh")
+;;
+;; `multi-term-default-dir' default is `~/', only use when current buffer
+;; is not in a real directory.
+;;
+;; `multi-term-buffer-name' is the name of term buffer.
+;;
+;; `multi-term-scroll-show-maximum-output' controls how interpreter
+;; output causes window to scroll.
+;;
+;; `multi-term-scroll-to-bottom-on-output' controls whether interpreter
+;; output causes window to scroll.
+;;
+;; `multi-term-switch-after-close' try to switch other `multi-term' buffer
+;; after close current one.
+;; If you don't like this feature just set it with nil.
+;;
+;; `term-unbind-key-list' is a key list to unbind some keystroke.
+;;
+;; `term-bind-key-alist' is a key alist that binds some keystroke.
+;; If you don't like default, modify it.
+;;
+;; `multi-term-dedicated-window-height' the height of a dedicated term window.
+;;
+;; `multi-term-dedicated-max-window-height' the max height limit that dedicated
+;; window is allowed.
+;;
 ;; `multi-term-dedicated-skip-other-window-p' whether skip dedicated term
 ;; window when use command `other-window' to cycle windows order.
 ;;
@@ -126,6 +246,15 @@
 ;;
 
 ;;; Change log:
+;;
+;; 2019/11/04
+;;      * Fix #2: use featurep test tramp library is load.
+;;
+;; 2019/10/19
+;;      * Support tramp
+;;
+;; 2017/03/03
+;;      * Switch to cl-lib
 ;;
 ;; 2016/06/19
 ;;      * Add Hogren's patch: `term-send-delete-word' and binding to key 'M-d'.
@@ -268,7 +397,7 @@
 
 ;;; Require:
 (require 'term)
-(require 'cl)
+(require 'cl-lib)
 (require 'advice)
 
 ;;; Code:
@@ -450,8 +579,7 @@ Will prompt you shell name when you type `C-u' before this command."
     (set-buffer term-buffer)
     ;; Internal handle for `multi-term' buffer.
     (multi-term-internal)
-    ;; Switch buffer
-    (switch-to-buffer term-buffer)))
+    (multi-term-switch-buffer term-buffer default-directory)))
 
 ;;;###autoload
 (defun multi-term-next (&optional offset)
@@ -620,6 +748,17 @@ Similar to how `quoted-insert' works in a regular buffer."
   ;; Add hook to be sure `term' quit subjob before buffer killed.
   (add-hook 'kill-buffer-hook 'multi-term-kill-buffer-hook))
 
+(defun multi-term-switch-buffer (term-buffer default-dir)
+  "If we are in `tramp-mode', switch to TERM-BUFFER based on DEFAULT-DIR."
+  (switch-to-buffer term-buffer)
+  ;; Just test tramp file when library `tramp' is loaded.
+  (when (and (featurep 'tramp)
+             (tramp-tramp-file-p default-dir))
+    (with-parsed-tramp-file-name default-dir path
+      (let ((method (cadr (assoc `tramp-login-program (assoc path-method tramp-methods)))))
+        (term-send-raw-string (concat method " " (when path-user (concat path-user "@")) path-host "\C-m"))
+        (term-send-raw-string (concat "cd '" path-localname "'\C-m"))))))
+
 (defun multi-term-get-buffer (&optional special-shell dedicated-window)
   "Get term buffer.
 If option SPECIAL-SHELL is `non-nil', will use shell from user input.
@@ -697,7 +836,7 @@ If DIRECTION `PREVIOUS', switch to the previous term.
 Option OFFSET for skip OFFSET number term buffer."
   (if multi-term-buffer-list
       (let ((buffer-list-len (length multi-term-buffer-list))
-            (my-index (position (current-buffer) multi-term-buffer-list)))
+            (my-index (cl-position (current-buffer) multi-term-buffer-list)))
         (if my-index
             (let ((target-index (if (eq direction 'NEXT)
                                     (mod (+ my-index offset) buffer-list-len)
@@ -714,7 +853,7 @@ So this function unbinds some keys with `term-raw-map',
 and binds some keystroke with `term-raw-map'."
   (let (bind-key bind-command)
     ;; Unbind base key that conflict with user's keys-tokes.
-    (dolist (unbind-key term-unbind-key-list)
+    (cl-dolist (unbind-key term-unbind-key-list)
       (cond
        ((stringp unbind-key) (setq unbind-key (read-kbd-macro unbind-key)))
        ((vectorp unbind-key) nil)
@@ -723,7 +862,7 @@ and binds some keystroke with `term-raw-map'."
     ;; Add some i use keys.
     ;; If you don't like my keystroke,
     ;; just modified `term-bind-key-alist'
-    (dolist (element term-bind-key-alist)
+    (cl-dolist (element term-bind-key-alist)
       (setq bind-key (car element))
       (setq bind-command (cdr element))
       (cond
@@ -802,7 +941,7 @@ Dedicated window can't deleted by command `delete-other-windows'."
   (let ((multi-term-dedicated-active-p (multi-term-window-exist-p multi-term-dedicated-window)))
     (if multi-term-dedicated-active-p
         (let ((current-window (selected-window)))
-          (dolist (win (window-list))
+          (cl-dolist (win (window-list))
             (when (and (window-live-p win)
                        (not (eq current-window win))
                        (not (window-dedicated-p win)))
@@ -831,7 +970,7 @@ to display buffer, even when the option `pop-up-windows' is enabled.
 And the example function that can induce the problem is `pop-to-buffer'.
 
 This advice will fix this problem when current frame just have one `non-dedicated' window."
-  (when (and pop-up-windows                           ;`pop-up-windows' is enable
+  (when (and pop-up-windows             ;`pop-up-windows' is enable
              (multi-term-window-dedicated-only-one-p) ;just have one `non-dedicated' window.
              (multi-term-window-exist-p multi-term-dedicated-window)
              (not (multi-term-dedicated-window-p))) ;not in `sr-speedbar' window
