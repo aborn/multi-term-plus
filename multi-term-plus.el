@@ -169,6 +169,27 @@
           (message "switch to buffer %s" (buffer-name buf))
           (switch-to-buffer buf))))))
 
+(defun multi-term-create-powershell ()
+  "Create a new power shell"
+  (interactive)
+  (let* (name)
+    (setq name (multi-term-generate-powershell-buffer-name))
+    (message "name = %s  " name)
+    (setq koopa-powershell-buffer-name (multi-term-generate-powershell-buffer-name))
+    (koopa-run-powershell)))
+
+(defun aborn/getname ()
+  "get"
+  (interactive)
+  (message "%s" (multi-term-generate-powershell-buffer-name)))
+
+(defun multi-term-generate-powershell-buffer-name ()
+  "Auto create power shell buffer name"
+  (let* (blist name)
+    (setq blist (multi-term--buffer-name-list))
+    (setq name (format "*PowerShell%d*" (+ 1 (length blist))))
+    (format "%s" name)))
+
 (defun multi-term-create (name)
   "Create new term `NAME'"
   (let ((old default-directory))

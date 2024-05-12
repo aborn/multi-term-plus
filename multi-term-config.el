@@ -43,7 +43,7 @@
     (if (string= system-type "windows-nt")
         (progn
           (if (or (not b) (eq 'comint-mode major-mode))
-              (progn (koopa-run-powershell)
+              (progn (multi-term-create-powershell)
                      (message "create a new powershell-term!")))
           (progn (switch-to-buffer b)
                  (message "switch a exist powershell-term!")))
