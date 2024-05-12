@@ -18,7 +18,9 @@ $ sh -c "$(curl -fsSL https://raw.github.com/aborn/multi-term-plus/master/script
 (add-to-list 'load-path "~/multi-term-plus")
 (require 'multi-term-config)
 ```
-* For detail configuration, please ref [multi-term-config.el](./multi-term-config.el). Modify it as you need.
+* For detail configuration, please ref [multi-term-config.el](./multi-term-config.el). Modify it as you need. ```M-x get-term``` run the shell.
+
+* For windows user, pls install [koopa-mode](https://github.com/sch0lars/koopa-mode) firt, and ```M-x get-term``` will run koopa-run-powershell.
 
 ## Extensions
 * Fast term switch when you open multi terms (key binding: **C-{**).  
