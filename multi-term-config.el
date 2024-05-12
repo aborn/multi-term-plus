@@ -25,7 +25,8 @@
 (defun last-term-buffer (l)
   "Return most recently used term buffer."
   (when l
-    (if (eq 'term-mode (with-current-buffer (car l) major-mode))
+    (if (or (eq 'term-mode (with-current-buffer (car l) major-mode))
+            (eq 'comint-mode (with-current-buffer (car l) major-mode)))
         (car l) (last-term-buffer (cdr l)))))
 
 (defun multi-term-use-right-botton-window ()
@@ -39,12 +40,19 @@
   ;; use right-botton window, modify as you need.
   (select-window (multi-term-use-right-botton-window))
   (let ((b (last-term-buffer (buffer-list))))
-    (if (or (not b) (eq 'term-mode major-mode))
-        (progn (multi-term)
-               (message "create a new multi-term!"))
-      (progn (switch-to-buffer b)
-             (message "switch a exist multi-term!"))))
-  (define-key term-raw-map (kbd "M-n") 'ace-jump-mode))
+    (if (string= system-type "windows-nt")
+        (progn
+          (if (or (not b) (eq 'comint-mode major-mode))
+              (progn (koopa-run-powershell)
+                     (message "create a new powershell-term!")))
+          (progn (switch-to-buffer b)
+                 (message "switch a exist powershell-term!")))
+      (if (or (not b) (eq 'term-mode major-mode))
+          (progn (multi-term)
+                 (message "create a new multi-term!"))
+        (progn (switch-to-buffer b)
+               (message "switch a exist multi-term!"))))
+    (define-key term-raw-map (kbd "M-n") 'ace-jump-mode)))
 
 ;; Reserved key-binding, not used in multi-term mode.
 (add-to-list 'term-bind-key-alist '("C-j"))
