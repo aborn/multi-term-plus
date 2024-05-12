@@ -134,7 +134,9 @@
   (let* ((multi-term-filter-buffer-list
           (cl-remove-if-not
            #'(lambda (x)
-               (and (member x multi-term-buffer-list)
+               (and (if (string= system-type "windows-nt")
+                        (eq 'comint-mode (buffer-mode x)) ;; windows system powershell
+                      (member x multi-term-buffer-list))
                     (not (eq (current-buffer) x))))
            (buffer-list))))
     (mapcar (lambda (elt)
